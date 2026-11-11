@@ -7,12 +7,13 @@
   Security policy: no scripts, no network connections, no form submissions.
   The only thing allowed is this page's own inline stylesheet (pinned by hash).
 -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'sha256-hKdLmWd6HlbCDswfG6+NPEgTnbSMIADG3wbWnuzDaLU='; img-src data:; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'sha256-MG+02iPBvOZQez3n+5wbNTI5dFBryDOUhG+gr9TRZY0='; img-src data:; form-action 'none'; base-uri 'none'">
 <meta name="referrer" content="no-referrer">
 <link rel="icon" href="data:,">
 <title>See My Card</title>
 <style>
   :root {
+    color-scheme: light dark;
     --bg: #f4f5f7; --surface: #fff; --text: #1a1d21; --muted: #646b76; --faint: #c9ced6;
     --border: #e1e4e9; --accent: #1a73e8;
   }
@@ -58,6 +59,13 @@
     font-size: 1.1rem; pointer-events: none;
   }
   input.display::placeholder { font: 600 1.1rem/1.3 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--faint); }
+  /* Chrome paints its own background on autofilled fields (and won't let pages
+     change it). An inset shadow in the page's colors covers it up. Kept as
+     separate rules: a browser that doesn't know one selector drops the whole rule. */
+  input:-webkit-autofill { -webkit-box-shadow: 0 0 0 100px var(--bg) inset; box-shadow: 0 0 0 100px var(--bg) inset; -webkit-text-fill-color: var(--text); caret-color: var(--text); }
+  input:autofill { box-shadow: 0 0 0 100px var(--bg) inset; -webkit-text-fill-color: var(--text); }
+  input.display:-webkit-autofill { -webkit-box-shadow: 0 0 0 100px var(--surface) inset; box-shadow: 0 0 0 100px var(--surface) inset; }
+  input.display:autofill { box-shadow: 0 0 0 100px var(--surface) inset; }
   .actions { margin-top: 18px; text-align: right; }
   button {
     font: 600 0.9rem/1 inherit; padding: 8px 16px; border-radius: 999px; cursor: pointer;
