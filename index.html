@@ -7,7 +7,7 @@
   Security policy: no scripts, no network connections, no form submissions.
   The only thing allowed is this page's own inline stylesheet (pinned by hash).
 -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'sha256-TPFronsgNzqkl79DqlLnaRqldL5DgPc41AX+tNULQUk='; img-src data:; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'sha256-ttHrj9gSjebzjBTQrg/9aEhrDPIae9ajuG4ttYlgdlE='; img-src data:; form-action 'none'; base-uri 'none'">
 <meta name="referrer" content="no-referrer">
 <link rel="icon" href="data:,">
 <title>See My Card</title>
@@ -51,14 +51,14 @@
   input::placeholder { font: 400 1rem/1.3 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; letter-spacing: 0; color: var(--muted); }
   /* Card number: four boxes styled to look like one field, so the number shows
      in groups of 4. Chrome fills split card-number fields piece by piece. */
-  .hint { font-size: 0.85rem; color: var(--muted); margin: -2px 0 8px; }
   .cardnum {
-    display: flex; gap: 0.7em; padding: 12px 14px; background: var(--bg);
+    display: flex; gap: 0.7em; padding: 8px 14px; background: var(--bg);
     border: 2px solid var(--border); border-radius: 12px;
   }
   .cardnum:focus-within { border-color: var(--accent); }
   .cardnum input {
     width: 4.4ch; flex: 0 0 auto; padding: 0; border: 0; border-radius: 0; background: transparent;
+    font-size: 1.15rem;
   }
   .cardnum input:last-child { flex: 1 1 auto; min-width: 4.4ch; }
   .cardnum input::placeholder { font: inherit; letter-spacing: inherit; color: var(--faint); }
@@ -79,20 +79,14 @@
   input:autofill { box-shadow: 0 0 0 100px var(--bg) inset; -webkit-text-fill-color: var(--text); }
   input.display:-webkit-autofill { -webkit-box-shadow: 0 0 0 100px var(--surface) inset; box-shadow: 0 0 0 100px var(--surface) inset; }
   input.display:autofill { box-shadow: 0 0 0 100px var(--surface) inset; }
-  .actions { margin-top: 18px; text-align: right; }
+  .label-row { display: flex; justify-content: space-between; align-items: center; margin: 0 0 6px; }
+  .label-row label { margin: 0; }
   button {
-    font: 600 0.9rem/1 inherit; padding: 8px 16px; border-radius: 999px; cursor: pointer;
+    font: 600 0.8rem/1 inherit; padding: 5px 12px; border-radius: 999px; cursor: pointer;
     color: var(--muted); background: transparent; border: 1px solid var(--border);
   }
 
   .trust { text-align: center; font-size: 0.85rem; color: var(--muted); margin: 14px 0 24px; }
-  .help {
-    font-size: 0.9rem; color: var(--muted); background: var(--surface);
-    border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; margin: 0 0 24px;
-  }
-  .help p { margin: 0; }
-  .help p + p { margin-top: 6px; }
-  .help strong { color: var(--text); }
   /* One tap/click selects the whole address, ready to copy. */
   code.copy {
     display: inline-block; margin-top: 4px; padding: 2px 8px; border-radius: 6px;
@@ -127,8 +121,10 @@
     blocks all form submissions.
   -->
   <form autocomplete="on">
-    <label for="cc-number">Card number</label>
-    <p class="hint">Tap the box, then pick a saved card</p>
+    <div class="label-row">
+      <label for="cc-number">Card number</label>
+      <button type="reset">Clear</button>
+    </div>
     <!-- Four parts of one card number. The last part allows extra digits for rare longer card numbers. -->
     <div class="cardnum">
       <input id="cc-number" type="text" inputmode="numeric" maxlength="4" autocomplete="cc-number" spellcheck="false" autocorrect="off" autocapitalize="off" placeholder="&bull;&bull;&bull;&bull;" aria-label="Card number, digits 1 to 4">
@@ -153,17 +149,17 @@
       </div>
     </div>
 
-    <div class="actions"><button type="reset">Clear</button></div>
   </form>
 
   <p class="trust">Private: your card never leaves your device. <a href="https://github.com/ianchen23/see-my-card/blob/main/index.html">View source</a></p>
 
-  <div class="help">
-    <p><strong>No cards showing?</strong> Check what's saved to your Google account in
+  <details>
+    <summary>No cards showing?</summary>
+    <p>Check what's saved to your Google account in
       <a href="https://pay.google.com/gp/w/home/paymentmethods" target="_blank" rel="noopener noreferrer">Google Wallet</a>.</p>
     <p>On a computer, you can also paste this into Chrome's address bar:
       <code class="copy">chrome://settings/payments</code></p>
-  </div>
+  </details>
 
   <details>
     <summary>Is this safe?</summary>
