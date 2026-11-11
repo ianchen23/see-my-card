@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+  Security policy: no scripts, no network connections, no form submissions.
+  The only thing allowed is this page's own inline stylesheet (pinned by hash).
+-->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'sha256-hKdLmWd6HlbCDswfG6+NPEgTnbSMIADG3wbWnuzDaLU='; img-src data:; form-action 'none'; base-uri 'none'">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="data:,">
+<title>See My Card</title>
+<style>
+  :root {
+    --bg: #f4f5f7; --surface: #fff; --text: #1a1d21; --muted: #646b76; --faint: #c9ced6;
+    --border: #e1e4e9; --accent: #1a73e8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #121417; --surface: #1d2024; --text: #e8eaed; --muted: #9aa1ab; --faint: #474d55;
+      --border: #30353b; --accent: #8ab4f8;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  main { max-width: 480px; margin: 0 auto; padding: 40px 16px 48px; }
+  header { text-align: center; margin-bottom: 24px; }
+  h1 { font-size: 1.6rem; margin: 0 0 6px; }
+  .chip {
+    display: inline-block; font-size: 0.85rem; color: var(--muted);
+    border: 1px solid var(--border); border-radius: 999px; padding: 3px 12px; background: var(--surface);
+  }
+
+  form {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
+    padding: 22px 20px 18px; box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  }
+  label { display: block; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+  input {
+    display: block; width: 100%; margin: 0; padding: 12px 14px;
+    font: 600 1.35rem/1.3 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    letter-spacing: 0.05em; color: var(--text); background: var(--bg);
+    border: 2px solid var(--border); border-radius: 12px;
+  }
+  input:focus { outline: none; border-color: var(--accent); }
+  input::placeholder { font: 400 1rem/1.3 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; letter-spacing: 0; color: var(--muted); }
+  .row { display: flex; gap: 16px; margin-top: 20px; }
+  .row > div { flex: 1; min-width: 0; }
+  .row > div.exp { flex: 0 0 6.5em; }
+  /* Display-only fields: still real inputs so Chrome can fill them,
+     but they look like plain text and can't be clicked or tabbed into. */
+  input.display {
+    padding: 0; border: 0; border-radius: 0; background: transparent;
+    font-size: 1.1rem; pointer-events: none;
+  }
+  input.display::placeholder { font: 600 1.1rem/1.3 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--faint); }
+  .actions { margin-top: 18px; text-align: right; }
+  button {
+    font: 600 0.9rem/1 inherit; padding: 8px 16px; border-radius: 999px; cursor: pointer;
+    color: var(--muted); background: transparent; border: 1px solid var(--border);
+  }
+
+  .trust { text-align: center; font-size: 0.85rem; color: var(--muted); margin: 14px 0 24px; }
+  .help {
+    font-size: 0.9rem; color: var(--muted); background: var(--surface);
+    border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; margin: 0 0 24px;
+  }
+  .help p { margin: 0; }
+  .help p + p { margin-top: 6px; }
+  .help strong { color: var(--text); }
+  /* One tap/click selects the whole address, ready to copy. */
+  code.copy {
+    display: inline-block; margin-top: 4px; padding: 2px 8px; border-radius: 6px;
+    font: 0.88rem ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    color: var(--text); background: var(--bg); border: 1px solid var(--border);
+    -webkit-user-select: all; user-select: all; cursor: text;
+  }
+  a { color: var(--accent); }
+
+  details { border-top: 1px solid var(--border); padding: 12px 2px; }
+  details:last-of-type { border-bottom: 1px solid var(--border); }
+  summary { cursor: pointer; font-weight: 600; font-size: 0.95rem; }
+  details p, details ol, details ul { font-size: 0.92rem; color: var(--muted); margin: 8px 0 0; }
+  details ol, details ul { padding-left: 20px; }
+  details li { margin-bottom: 3px; }
+
+  footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 24px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>See My Card</h1>
+    <span class="chip">For cards saved in Google Chrome</span>
+  </header>
+
+  <!--
+    No `name` attributes on purpose: browsers never send unnamed fields anywhere,
+    even if the form were somehow submitted. The security policy above also
+    blocks all form submissions.
+  -->
+  <form autocomplete="on">
+    <label for="cc-number">Card number</label>
+    <input id="cc-number" type="text" inputmode="numeric" autocomplete="cc-number" spellcheck="false" autocorrect="off" autocapitalize="off" placeholder="Tap here to pick a saved card">
+
+    <!--
+      Name and expiry are filled by Chrome along with the card number.
+      They're intentionally not `readonly` (Chrome won't fill read-only fields);
+      CSS and tabindex make them display-only instead.
+    -->
+    <div class="row">
+      <div>
+        <label for="cc-name">Name on card</label>
+        <input id="cc-name" class="display" type="text" tabindex="-1" autocomplete="cc-name" spellcheck="false" autocorrect="off" autocapitalize="off" placeholder="&mdash;">
+      </div>
+      <div class="exp">
+        <label for="cc-exp">Expires</label>
+        <input id="cc-exp" class="display" type="text" tabindex="-1" maxlength="5" autocomplete="cc-exp" spellcheck="false" autocorrect="off" autocapitalize="off" placeholder="MM/YY">
+      </div>
+    </div>
+
+    <div class="actions"><button type="reset">Clear</button></div>
+  </form>
+
+  <p class="trust">Private: your card never leaves your device. <a href="https://github.com/ianchen23/see-my-card/blob/main/index.html">View source</a></p>
+
+  <div class="help">
+    <p><strong>No cards showing?</strong> Check what's saved to your Google account in
+      <a href="https://pay.google.com/gp/w/home/paymentmethods" target="_blank" rel="noopener noreferrer">Google Wallet</a>.</p>
+    <p>On a computer, you can also paste this into Chrome's address bar:
+      <code class="copy">chrome://settings/payments</code></p>
+  </div>
+
+  <details>
+    <summary>Is this safe?</summary>
+    <ul>
+      <li>No tracking, ads, accounts, or server. The page is a single file and runs no code.</li>
+      <li>Chrome fills the boxes on your own device; the page has no way to send them anywhere. Closing the tab erases everything.</li>
+      <li>Verify it: right-click &rarr; <strong>View page source</strong> and compare with the <a href="https://github.com/ianchen23/see-my-card/blob/main/index.html">source on GitHub</a>.</li>
+      <li>Rather not trust any website? <a href="https://github.com/ianchen23/see-my-card#host-your-own-copy">Host your own copy</a> for free.</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>Recommended: lock your cards</summary>
+    <p>In Chrome, go to <strong>Settings &rarr; Autofill and passwords &rarr; Payment methods</strong> and turn on <em>Verify it's you to autofill payment methods</em>. Then nobody using your unlocked device can see your cards without your fingerprint, face, or PIN.</p>
+  </details>
+
+  <footer>Open source &middot; MIT license &middot; Not affiliated with Google</footer>
+</main>
+</body>
+</html>
