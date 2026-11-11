@@ -7,7 +7,7 @@
   Security policy: no scripts, no network connections, no form submissions.
   The only thing allowed is this page's own inline stylesheet (pinned by hash).
 -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'sha256-7pANIW2EJK15EYmQ+0Y04KRvFSeM50C8QhfQOfYpjEI='; img-src data:; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'sha256-TPFronsgNzqkl79DqlLnaRqldL5DgPc41AX+tNULQUk='; img-src data:; form-action 'none'; base-uri 'none'">
 <meta name="referrer" content="no-referrer">
 <link rel="icon" href="data:,">
 <title>See My Card</title>
@@ -110,6 +110,8 @@
   details li { margin-bottom: 3px; }
 
   footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 24px; }
+  footer p { margin: 0; }
+  footer .tip-line { margin-bottom: 4px; }
 </style>
 </head>
 <body>
@@ -178,7 +180,10 @@
     <p>In Chrome, go to <strong>Settings &rarr; Autofill and passwords &rarr; Payment methods</strong> and turn on <em>Verify it's you to autofill payment methods</em>. Then nobody using your unlocked device can see your cards without your fingerprint, face, or PIN.</p>
   </details>
 
-  <footer>Open source &middot; MIT license &middot; Not affiliated with Google</footer>
+  <footer>
+    <p class="tip-line">Found this useful? <a href="https://buymeacoffee.com/cccggg" target="_blank" rel="noopener noreferrer">Buy me a coffee &#9749;</a></p>
+    <p>Open source &middot; MIT license &middot; Not affiliated with Google</p>
+  </footer>
 </main>
 </body>
 </html>
